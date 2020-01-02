@@ -10,8 +10,11 @@ function crawlingMusic(url, genre) {
     
         // Método de aquisição iterativo.
         $('.list li').each(function(){  // Para todas as <li> de classe "list", execute:
-            // Encontre a classe 'marts' e coloque seu texto em 'title'.
-            var title = $(this).find('.marts').text().trim();
+            // Encontre a classe 'marts' e coloque seu texto em 'title', a ser filtrado posteriormente.
+            var title = $(this).find('.marts').text().trim(); //Pega todo o título da música e sua posição.
+            var compos = title.split(".");//Separa a posição do título da música.
+            var position = compos[0];//Pega a posição que aquela música ocupa.
+            title = title.replace(position+'. ', "");//Remove a posição do título da música.
             // Encontre a classe 'tits' e coloque seu texto em 'artist'.
             var artist = $(this).find('.mtits').text().trim();
 
@@ -27,7 +30,7 @@ function crawlingMusic(url, genre) {
             });*/
 
             //Função que escreve o gênero juntamente com os atributos, todos num único arquivo.
-            fs.appendFile('musicDatabase.txt', title + '!' + artist + '*' + genre + '\n', function erro(erro) {
+            fs.appendFile('musicDatabase.txt', title + '*' + position + '*' + artist + '*' + genre + '\n', function erro(erro) {
                 if(erro) console.log('Houve um erro ao escrever o arquivo.');
             });
         });
