@@ -42,8 +42,8 @@ function crawlingMusic(url, genre) {
             //});
 
             //Função que escreve a entrada na tabela do DynamoDB.
-            AWS.config.update({region:'us-east-1'});
-            AWS.config.update({endpoint: "https://dynamodb.us-west-1.amazonaws.com"});
+            AWS.config.update({region: 'us-west-2'});
+            AWS.config.update({endpoint: "https://dynamodb.us-west-2.amazonaws.com"});
             var docClient = new AWS.DynamoDB.DocumentClient();
             var table = "MUSIC_POPULARITY";
             var ID = getRandomInt(0,999999999);
