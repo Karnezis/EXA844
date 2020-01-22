@@ -1,3 +1,5 @@
+org: ellenchalegre
+app: musiccrawler-app
 service: musiccrawler
 
 provider:
@@ -7,6 +9,8 @@ provider:
 functions:
   searchmusicpopularity:
     handler: handler.searchmusicpopularity
+    events:
+    — schedule: rate(1 day)
 
 resources:
   Resources:
