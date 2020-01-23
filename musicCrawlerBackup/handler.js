@@ -4,8 +4,7 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 const {extractMusicsFromHTML} = require('./crawler');
 
 module.exports.searchmusicpopularity = (event, context, callback) => {
-  let allMusics, sertMusics, intMusics, sambaMusics, funkMusics, eletMusics, popMusics, rapMusics, forroMusics;
-  let genMusics = [];
+  let allMusics, genMusics, sertMusics, intMusics, sambaMusics, funkMusics, eletMusics, popMusics, rapMusics, forroMusics;
   request('https://maistocadas.mus.br/musicas-mais-tocadas/')
     .then(({data}) => {
       genMusics = extractMusicsFromHTML(data, 'Geral');
@@ -45,18 +44,16 @@ module.exports.searchmusicpopularity = (event, context, callback) => {
     .then(() => {
       allMusics = genMusics.concat(sertMusics,intMusics,sambaMusics,funkMusics,eletMusics,popMusics,rapMusics,forroMusics);
       //Salvar a lista de músicas mais populares hoje.
-      setTimeout(() => {
-        return dynamo.put({
-          TableName: 'musicpopularity',
-          Item: {
-            listingId: new Date().toString(),
-            musics: allMusics
-          }
-        }).promise();
-      }, 3000);
+      return dynamo.put({
+        TableName: 'musicpopularity',
+        Item: {
+          listingId: new Date().toString(),
+          musics: allMusics
+        }
+      }).promise();
     })
     .then(() => {
-      callback(null, {musics: allMusics});
+      callback(null, { musics: allMusics });
     })
     .catch(callback);
 };

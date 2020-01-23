@@ -1,33 +1,16 @@
-service: 
-  name: musiccrawler
+org: ellenchalegre
+app: musiccrawler-app
+service: musiccrawler
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'dev'}
-  region: us-east-1
-  apiGateway:
-    minimumCompressionSize: 1024
-  environment:
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-  iamRoleStatements:
-  - Effect: "Allow"
-    Action:
-      - dynamodb:Query
-      - dynamodb:Scan
-      - dynamodb:GetItem
-      - dynamodb:PutItem
-      - dynamodb:UpdateItem
-      - dynamodb:DeleteItem
-    Resource: 'arn:aws:dynamodb:us-east-1:281954192120:table/musicpopularity'
 
 functions:
   searchmusicpopularity:
     handler: handler.searchmusicpopularity
     events:
-      - http:
-          method: get
-          path: searchmusicpopularity
+    — schedule: rate(1 day)
 
 resources:
   Resources:
@@ -44,6 +27,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    # A policy is a resource that states one or more permssions. It lists actions, resources and effects.
 
     DynamoDBIamPolicy: 
       Type: AWS::IAM::Policy
@@ -62,6 +47,6 @@ resources:
                 - dynamodb:PutItem
                 - dynamodb:UpdateItem
                 - dynamodb:DeleteItem
-              Resource: arn:aws:dynamodb:::table/musicpopularity
+              Resource: arn:aws:dynamodb:*:*:table/musicpopularity
         Roles:
           - Ref: IamRoleLambdaExecution
