@@ -2,29 +2,31 @@ const request = require('axios');
 const AWS = require('aws-sdk');
 const dynamo = new AWS.DynamoDB.DocumentClient();
 const {extractMusicsFromHTML} = require('./crawler');
+const {extractMusics} = require('./crawler_renew');
 
 module.exports.searchmusicpopularity = (event, context, callback) => {
-  let allMusics, sertMusics, intMusics, sambaMusics, funkMusics, eletMusics, popMusics, rapMusics, forroMusics;
+  let sertMusics, intMusics, sambaMusics, funkMusics, eletMusics, popMusics, rapMusics, forroMusics;
   let genMusics = [];
+  let allMusics = [];
   request('https://maistocadas.mus.br/musicas-mais-tocadas/')
     .then(({data}) => {
-      genMusics = extractMusicsFromHTML(data, 'Geral');
+      genMusics = extractMusics(data, 'Geral');
     })
   request('https://maistocadas.mus.br/musicas-sertanejas/')
     .then(({data}) => {
-      sertMusics = extractMusicsFromHTML(data, 'Sertanejo');
+      sertMusics = extractMusics(data, 'Sertanejo');
     })
   request('https://maistocadas.mus.br/musicas-internacionais/')
     .then(({data}) => {
-      intMusics = extractMusicsFromHTML(data, 'Internacional');
+      intMusics = extractMusics(data, 'Internacional');
     })
   request('https://maistocadas.mus.br/pagode-samba/')
     .then(({data}) => {
-      sambaMusics = extractMusicsFromHTML(data, 'Pagode');
+      sambaMusics = extractMusics(data, 'Pagode');
     })
   request('https://maistocadas.mus.br/musicas-funks/')
     .then(({data}) => {
-      funkMusics = extractMusicsFromHTML(data, 'Funk');
+      funkMusics = extractMusics(data, 'Funk');
     })
   request('https://maistocadas.mus.br/musicas-eletronicas/')
     .then(({data}) => {
@@ -56,7 +58,8 @@ module.exports.searchmusicpopularity = (event, context, callback) => {
       }, 3000);
     })
     .then(() => {
-      callback(null, {musics: allMusics});
+      let num = allMusics.length;
+      callback(null, {num});
     })
     .catch(callback);
 };
