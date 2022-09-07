@@ -9,7 +9,7 @@
   "author": "Ellen",
   "license": "UNLICENSED",
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.3"
   }
 }
