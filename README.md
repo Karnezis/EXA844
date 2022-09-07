@@ -1,2 +1,2 @@
-# Programação para Redes
- EXA844 - Universidade Estadual de Feira de Santana.
+# Project Description
+ This was a crawling project developed for the Network Programming course taken to complete my bachelor's degree in the State University of Feira de Santana. The project intended to crawl a popular website that ranked most played musics once a day and track changes in music and gender popularity.
